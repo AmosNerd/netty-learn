@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class TestClient {
     public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("127.0.0.1", 8085);
+        Socket socket = new Socket("127.0.0.1", 60);
         Scanner scanner = null;
         OutputStream os = null;
         scanner = new Scanner(System.in);

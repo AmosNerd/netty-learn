@@ -22,8 +22,7 @@ public class TestConnect {
         Channel channel = new NioSocketChannel();
         //回调,可以注册listener
         final ChannelFuture future = channel.connect(new InetSocketAddress("localhost", 25));
-        future.addListener(
-                new ChannelFutureListener() {
+        future.addListener(new ChannelFutureListener() {
                     public void operationComplete(ChannelFuture channelFuture) throws Exception {
                         if(channelFuture.isSuccess()){
                             ByteBuf buf= Unpooled.copiedBuffer("Hello", Charset.defaultCharset());
