@@ -6,6 +6,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
@@ -31,9 +32,9 @@ public class EchoClient {
             b.group(group)
                     .channel(NioSocketChannel.class)
                     .remoteAddress(new InetSocketAddress(host,port))
-                    .handler(new ChannelInitializer<>() {
+                    .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(Channel channel) throws Exception {
+                        protected void initChannel(SocketChannel channel) throws Exception {
                             channel.pipeline().addLast(new EchoClientHandler());
                         }
                     });
@@ -42,7 +43,15 @@ public class EchoClient {
         }finally {
             group.shutdownGracefully().sync();
         }
+    }
 
-
+    public static void main(String[] args) throws Exception {
+        if(args.length!=2){
+            System. err. println( "Usage: " + EchoClient. class. getSimpleName() + " < host> < port>");
+            return;
+        }
+        String host=args[0];
+        int port=Integer.parseInt(args[1]);
+        new EchoClient(host,port).start();
     }
 }
