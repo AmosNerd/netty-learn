@@ -7,9 +7,11 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import java.net.InetSocketAddress;
+import java.net.Socket;
 
 /**
  * 序号${}
@@ -33,19 +35,19 @@ public class EchoServer {
     }
 
     public void start() throws InterruptedException {
+
         final EchoServerHandler serverHandler = new EchoServerHandler();
         EventLoopGroup group = new NioEventLoopGroup();
         ServerBootstrap b = new ServerBootstrap();
         try {
-
-
             b.group(group)
                     .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(port))
-                    .childHandler(new ChannelInitializer() {
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(Channel channel) throws Exception {
+                        protected void initChannel(SocketChannel channel) throws Exception {
                             channel.pipeline().addLast(serverHandler);
+
                         }
                     });
             ChannelFuture f = b.bind().sync();
